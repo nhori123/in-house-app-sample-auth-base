@@ -1,0 +1,48 @@
+---
+import type { Announcement } from "../consts";
+
+interface Props {
+	announcements: Announcement[];
+}
+
+const { announcements } = Astro.props;
+
+const todayJst = new Intl.DateTimeFormat('sv-SE', {
+	timeZone: 'Asia/Tokyo',
+	year: 'numeric',
+	month: '2-digit',
+	day: '2-digit',
+}).format(new Date());
+
+const visibleAnnouncements = announcements.filter((announcement) => {
+	return announcement.publishedOn <= todayJst && todayJst < announcement.expiresOn;
+});
+
+const dateFormatter = new Intl.DateTimeFormat('ja-JP', {
+	timeZone: 'Asia/Tokyo',
+	year: 'numeric',
+	month: 'long',
+	day: 'numeric',
+});
+
+const formatDate = (dateString: string) => {
+	return dateFormatter.format(new Date(`${dateString}T00:00:00+09:00`));
+};
+---
+
+<article>
+	<h3>お知らせ</h3>
+
+	{visibleAnnouncements.length > 0 ? (
+		<div style="display: grid;;">
+			{visibleAnnouncements.map((announcement) => (
+				<div style="display: flex; align-items: baseline; flex-wrap: wrap;  gap: 0.75rem;">
+					<div><small>{formatDate(announcement.publishedOn)}</small></div>
+					<div>{announcement.content}</div>
+				</div>
+			))}
+		</div>
+	) : (
+		<p>お知らせはありません。</p>
+	)}
+</article>

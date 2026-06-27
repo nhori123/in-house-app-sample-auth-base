@@ -1,0 +1,24 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { ANNOUNCEMENTS } from "../consts";
+import AnnouncementList from "../components/AnnouncementList.astro";
+import { createSupabaseServerClient } from "../lib/supabase";
+
+const supabase = createSupabaseServerClient(Astro);
+const { data, error } = await supabase.auth.getUser();
+
+if (error || !data.user) {
+  return Astro.redirect("/login");
+}
+
+const user = data.user;
+---
+
+<BaseLayout title="dashboard">
+  <h2>dashboard page</h2>
+  <p>Logged in as {user.email}</p>
+  <p>Wellcome to In-house App!</p>
+  <AnnouncementList announcements={ANNOUNCEMENTS} />
+
+  <p>Here is a In-house App Dashboard Page.</p>
+</BaseLayout>

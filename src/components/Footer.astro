@@ -1,0 +1,14 @@
+---
+
+import { SITE_NAME } from "../consts";
+
+const {
+  name = SITE_NAME,
+} = Astro.props;
+
+const year = new Date().getFullYear();
+---
+
+<footer class="container-fluid" style="border-top: 1px solid #cdd4cf;;">
+	<p style="text-align: center;">&copy; {year} {name}. All rights reserved.</p>
+</footer>

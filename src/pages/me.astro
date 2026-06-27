@@ -1,0 +1,50 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { createSupabaseServerClient } from "../lib/supabase";
+
+const supabase = createSupabaseServerClient(Astro);
+const { data, error } = await supabase.auth.getUser();
+
+if (error || !data.user) {
+  return Astro.redirect("/login");
+}
+
+const user = data.user;
+---
+
+<BaseLayout title="me">
+  <h2>me page</h2>
+  <p>Logged in as {user.email}</p>
+  <p>Here is a In-house App Me Page.</p>
+  <button type="button" id="me-button">Me!</button>
+  <pre id="me-result" aria-live="polite" style="margin-top: 1rem; white-space: pre-wrap;"></pre>
+
+  <script>
+    const button = document.querySelector("#me-button");
+    const result = document.querySelector("#me-result");
+
+    button?.addEventListener("click", async () => {
+      if (!result) {
+        return;
+      }
+
+      result.textContent = "読み込み中...";
+
+      try {
+        const response = await fetch("/api/me");
+        const payload = await response.json();
+
+        result.textContent = JSON.stringify(
+          {
+            status: response.status,
+            payload,
+          },
+          null,
+          2,
+        );
+      } catch (error) {
+        result.textContent = error instanceof Error ? error.message : "Unknown error";
+      }
+    });
+  </script>
+</BaseLayout>

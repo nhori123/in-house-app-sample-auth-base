@@ -1,0 +1,89 @@
+# 設定メモ
+## プロジェクト作成～初期設定
+### Astoro Projectの作成
+- `npm create astro@latest .`
+```
+ tmpl   How would you like to start your new project?
+         Use minimal (empty) template
+
+  deps   Install dependencies?
+         Yes
+
+   git   Initialize a new git repository?
+         No
+```
+
+### cloudflare連携
+- `npm install @astrojs/cloudflare`
+
+``` astro.config.mjs
+import { defineConfig } from 'astro/config';
+import cloudflare from '@astrojs/cloudflare'; // 追加
+
+export default defineConfig({
+  output: 'server',        // Functions を使うために必要
+  adapter: cloudflare(),   // Cloudflare Pages 用
+});
+```
+### wranglerをインストール
+- `npm install wrangler@latest --save-dev`
+
+### `wrangler.jsonc`追加
+- `npx astro add cloudflare`
+すべて`yes`で進める。
+
+- `wrangler.jsonc`のnameを変更 (Gitでクローンした場合などでWorkersと名前が異なる場合)
+``` wrangler.jsonc
+"name": "astro-test2",
+```
+上記の値を実際のWorkersの名前に一致させること。
+
+### `.gitignore`に以下を追加
+```
+.wrangler/
+.dev.vars
+```
+
+### Supabase設定
+
+#### Supabaseプロジェクト作成
+
+- Project NameとDatabase passwordを決める。
+- Connect (画面上部の緑のボタン)からSUPABASE_URLとSUPABASE_KEYを確認
+  →`.dev.vars`で利用
+- Authentication>User から新しいユーザーとパスワードを設定
+  →「Auto confirm user?」はオンにしておくとEmailの認証は自動認証される
+- Authentication>Sign In/Probviders で「Allow new users to sign up」をオフ
+
+####  SDKとSSR 用ヘルパーをインストール
+`npm install @supabase/supabase-js @supabase/ssr`
+
+### hono
+`npm install hono` 
+
+---
+## Alpine.jsのインストール
+`npm install alpinejs @alpinejs/intersect`
+
+`src\types\alpine.d.ts` 作成
+```ts
+declare module 'alpinejs';
+declare module '@alpinejs/intersect';
+```
+`src\layouts\BaseLayout.astro` に追加
+```astro
+<head>
+  <script>
+    import Alpine from 'alpinejs';
+    import intersect from '@alpinejs/intersect';
+    Alpine.plugin(intersect);
+    Alpine.start();
+    </script>
+</head>
+```
+
+---
+
+## プロジェクトをローカルでプレビュー
+
+`npx astro build && npx wrangler dev`

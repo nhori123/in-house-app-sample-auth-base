@@ -1,0 +1,48 @@
+---
+import { SITE_NAME, SITE_DESCRIPTION } from "../consts";
+
+const {
+  name = SITE_NAME,
+  description = SITE_DESCRIPTION,
+} = Astro.props;
+---
+
+<header class="container-fluid" style="border-bottom: 1px solid #cdd4cf;">
+  <div style="display: flex; align-items: center; gap: 0;">
+    <div><img src="/sample200.png" alt="ICON画像" style="width: 48px; height: 48px;"></div>
+    <div><h1 style="margin: 0;">{name}</h1></div>
+  </div>
+  <p>{description}</p>
+  <nav>
+    <ul></ul>
+    <ul>
+      <li><a href="/dashboard">dashboard</a></li>
+      <li><a href="/me">me</a></li>
+      <li><a href="#">menu2</a></li>
+      <li><a href="/api/logout" role="button">Logout</a></li>
+    </ul>
+    <ul></ul>
+  </nav>
+</header>
+
+<style>
+  /* スマホ等 幅が狭い場合にヘッダ内の真ん中のnavリストをグリッド表示にする */
+  @media (max-width: 768px) {
+    header.container-fluid nav ul:nth-of-type(2) {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+      padding: 0;
+      margin: 0;
+    }
+    header.container-fluid nav ul:nth-of-type(2) li {
+      list-style: none;
+    }
+    header.container-fluid nav ul:nth-of-type(2) a {
+      display: block;
+      padding: 0.5rem 0.6rem;
+      border-radius: 4px;
+      text-align: center;
+    }
+  }
+</style>
