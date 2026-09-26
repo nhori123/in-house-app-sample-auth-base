@@ -1,5 +1,7 @@
 # in-house-app-sample-auth-base
 
+> EntraID認証に対応したリポジトリは[こちら](https://github.com/nhori123/in-house-app-sample-auth-base)
+
 Astro + Hono + Supabase + Cloudflare Workers で構築する業務アプリのテンプレートです。
 
 このリポジトリは、まず Supabase Auth でログインできるところまでを土台として用意しています。ここから業務ごとの画面、API、権限制御、データ処理を追加していくことを想定しています。
